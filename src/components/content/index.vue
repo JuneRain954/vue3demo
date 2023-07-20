@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    hhhhhhhhhhhhhhh
+    <RouterView />
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 <style scoped>
 .content{
   margin-top: 70px;
-  min-height: 700px;
+  min-height: 900px;
   width: 1200px;
   background-color: cyan;
 }
