@@ -15,8 +15,8 @@
   </header>
 </template>
 
-<script setup lang='ts'>
-
+<script setup lang='ts' name="Header">
+// 加个注释，避免组件名不生效
 </script>
 
 <style scoped>
@@ -30,6 +30,7 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #eee;
+  background-color: #fff;
   .content{
     width: 1200px;
     height: 70px;

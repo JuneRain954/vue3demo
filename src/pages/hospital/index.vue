@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script lang='ts' setup>
-
+<script lang='ts' setup name="hospital">
+// script有内容，组件名才会生效
 </script>
 
 <style lang='scss' scoped>

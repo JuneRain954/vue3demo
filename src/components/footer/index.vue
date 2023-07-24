@@ -15,8 +15,8 @@
   </footer>
 </template>
 
-<script setup lang='ts'>
-
+<script setup lang='ts' name="Footer">
+// 加个注释，避免组件名不生效
 </script>
 
 <style lang="scss" scoped>
