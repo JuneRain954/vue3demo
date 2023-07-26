@@ -3,6 +3,8 @@ import { createApp } from 'vue';
 // 引入 ElementPlus UI库
 import ElementPlus from 'element-plus';
 import "element-plus/dist/index.css";
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
+
 import App from './App.vue';
 import Header from '@/components/header/index.vue';
 import Footer from '@/components/footer/index.vue';
@@ -11,7 +13,7 @@ import router from '@/router/index';
 
 const app = createApp(App);
 app.use(router);
-app.use(ElementPlus);
+app.use(ElementPlus, {locale: zhCn});
 
 app.component("Header", Header);
 app.component("Footer", Footer);

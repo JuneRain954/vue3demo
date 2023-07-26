@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script lang='ts' setup>
+<script lang='ts' setup name="Search">
 import { ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 
@@ -43,6 +43,9 @@ const onSearch = () => {
       .el-input__wrapper{
         border-radius: 20px;
         padding-right: 54px;
+        .el-input__inner{
+          padding-left: 6px;
+        }
       }
     }
   }
