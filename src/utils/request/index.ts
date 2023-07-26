@@ -1,34 +1,35 @@
-import request from './request';
-import { HOSPITAL, REQ_METHOD } from '../const/api';
-import type { HospitalPage } from '../const/api'
+/**
+ * axios封装 
+ */ 
 
-export interface ListResponseData {
-  content: Array<object>;
-  totalElements: number;
-}
+import axios from 'axios';
+import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 
-export interface ApiResponse{
-  code: number;
-  data: object;
-  message: string;
-  ok?: string;
-}
+type reqType = InternalAxiosRequestConfig<any>;
+type reqRetType = InternalAxiosRequestConfig<any> | Promise<InternalAxiosRequestConfig<any>>;
+type repType = AxiosResponse<any, any>;
+type repRetType = AxiosResponse<any, any> | Promise<AxiosResponse<any, any>>;
 
+const BASE_URL = "/api";
 
-export class HospitalApi{
-  constructor(){
+// 创建 axios 服务
+const axiosInst = axios.create({
+  baseURL: BASE_URL,
+  timeout: 10 * 1000,
+});
 
-  }
+// 请求拦截
+axiosInst.interceptors.request.use((config: reqType): reqRetType => {
+  return config;
+})
 
-  static hospitalType(): Promise<ApiResponse> | Promise<any>{
-    return request({url: HOSPITAL.TYPE, method: REQ_METHOD.GET});
-  }
+// 响应拦截
+axiosInst.interceptors.response.use((reponse: repType): repRetType => {
+  return reponse.data;
+}, (err) => {
+  // 处理请求失败
+  console.log("[interceptors.response] error: ", err);
+  return Promise.reject(new Error(err.message));
+})
 
-  static hospitalRegion(){
-    return request({url: HOSPITAL.REGION, method: REQ_METHOD.GET});
-  }
-
-  static hospitalList(params: HospitalPage): Promise<ApiResponse> | Promise<any>{
-    return request({ url: HOSPITAL.PAGE.URL(params), method: REQ_METHOD.GET });
-  }
-}
+export default axiosInst;

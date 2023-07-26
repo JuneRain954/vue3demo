@@ -7,12 +7,17 @@
 <script lang='ts' setup name="HospitalType">
 import { reactive, onMounted, computed } from 'vue';
 import Info from '@/components/info/index.vue';
-import { HospitalApi } from '@/utils/request/index.ts';
-import type { ApiResponse } from '@/utils/request/index.ts'
+import type { Item } from '@/components/info/index.vue'
+import { HospitalApi } from '@/api/index';
+import type { ApiResponse } from '@/api/index'
 
 
 
-const level = reactive({
+const level = reactive<{
+  title: string;
+  desc: string;
+  list: Item[]
+}>({
   title: "医院",
   desc: "等级",
   list: [],

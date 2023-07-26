@@ -20,7 +20,7 @@
 <script lang='ts' setup name="Info">
 import { computed, ref } from 'vue';
 
-interface Item{
+export interface Item{
   id: number | string;
   name: string;
   value: string;

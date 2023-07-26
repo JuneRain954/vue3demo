@@ -74,8 +74,11 @@ const props = defineProps({
   .info{
     width: 70%;
     .name{
-      font-size: 20px;
+      font-size: 17px;
       margin-bottom: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .label{
       display: flex;

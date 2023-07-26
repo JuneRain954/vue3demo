@@ -4,23 +4,25 @@
       <Card :info="item"/>
     </div>
   </div>
-  <el-pagination
-    :total="hospitalData.total"
-    :current-page="hospitalData.curPage"
-    :page-size="hospitalData.pageSize"
-    :page-sizes="hospitalData.pageSizeList"
-    :layout="hospitalData.layout"
-    :disabled="disabled"
-    @size-change="onPageSize"
-    @current-change="onCurPage"/>
+  <blockquote v-if="isShowPagination">
+    <el-pagination
+      :total="hospitalData.total"
+      :current-page="hospitalData.curPage"
+      :page-size="hospitalData.pageSize"
+      :page-sizes="hospitalData.pageSizeList"
+      :layout="hospitalData.layout"
+      :disabled="disabled"
+      @size-change="onPageSize"
+      @current-change="onCurPage"/>
+  </blockquote>
 </template>
 
 <script lang='ts' setup name="HospitalList">
 import Card from '@/components/card/index.vue';
 import { reactive, computed, onMounted } from 'vue';
 import type { HospitalItem } from '@/components/card/index.vue'
-import { HospitalApi } from '@/utils/request/index';
-import type { ApiResponse, ListResponseData } from '@/utils/request/index'
+import { HospitalApi } from '@/api/index';
+import type { ApiResponse, ListResponseData } from '@/api/index'
 
 export interface HospitalData {
   list: HospitalItem[];
@@ -39,6 +41,7 @@ const hospitalData = reactive<HospitalData>({
 });
 
 const disabled = computed(() => !hospitalData.total);
+const isShowPagination = computed(() => hospitalData.total);
 
 onMounted(() => {
   getHospitalList();

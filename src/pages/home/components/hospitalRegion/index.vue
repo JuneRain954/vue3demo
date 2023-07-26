@@ -7,7 +7,7 @@
 <script lang='ts' setup name="HospitalRegion">
 import { reactive, onMounted, computed } from 'vue';
 import Info from '@/components/info/index.vue';
-import { HospitalApi } from '@/utils/request/index';
+import { HospitalApi } from '@/api/index';
 
 const region = reactive({
   desc: "地区",
