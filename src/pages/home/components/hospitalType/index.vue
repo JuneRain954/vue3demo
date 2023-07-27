@@ -1,22 +1,22 @@
 <template>
   <div class='hospital-type-component'>
-    <Info :title="level.title" :desc="level.desc" :list="levelList" />
+    <Info v-model:val="hostype" :title="level.title" :desc="level.desc" :list="levelList" />
   </div>
 </template>
 
 <script lang='ts' setup name="HospitalType">
-import { reactive, onMounted, computed } from 'vue';
+import { reactive, onMounted, computed, ref } from 'vue';
 import Info from '@/components/info/index.vue';
-import type { Item } from '@/components/info/index.vue'
 import { HospitalApi } from '@/api/index';
-import type { ApiResponse } from '@/api/index'
+import type { HospitalTypeResponse, HospitalType } from '@/api/type';
 
 
+const hostype = ref<number | string>(0);
 
 const level = reactive<{
   title: string;
   desc: string;
-  list: Item[]
+  list: HospitalType[]
 }>({
   title: "医院",
   desc: "等级",
@@ -32,7 +32,7 @@ const levelList = computed(() => [{id: "reandomStr", name: "全部", value: ""},
 // 获取医院类型
 const getHospitalType = async () => {
   try {
-    const res: ApiResponse = await HospitalApi.hospitalType();
+    const res: HospitalTypeResponse = await HospitalApi.hospitalType();
     if(res.code == 200){
       level.list = res.data;
     }

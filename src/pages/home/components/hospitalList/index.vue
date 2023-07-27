@@ -1,14 +1,14 @@
 <template>
   <div class='hospital-list'>
-    <div class="item" v-for="item in hospitalData.list" :key="item.name">
+    <div class="item" v-for="item in hospitalData.list" :key="item.id">
       <Card :info="item"/>
     </div>
   </div>
   <blockquote v-if="isShowPagination">
     <el-pagination
       :total="hospitalData.total"
-      :current-page="hospitalData.curPage"
-      :page-size="hospitalData.pageSize"
+      v-model:current-page="hospitalData.curPage"
+      v-model:page-size="hospitalData.pageSize"
       :page-sizes="hospitalData.pageSizeList"
       :layout="hospitalData.layout"
       :disabled="disabled"
@@ -20,12 +20,11 @@
 <script lang='ts' setup name="HospitalList">
 import Card from '@/components/card/index.vue';
 import { reactive, computed, onMounted } from 'vue';
-import type { HospitalItem } from '@/components/card/index.vue'
 import { HospitalApi } from '@/api/index';
-import type { ApiResponse, ListResponseData } from '@/api/index'
+import type { HospitalListResponse, HospitalInfo } from '@/api/type'
 
 export interface HospitalData {
-  list: HospitalItem[];
+  list: HospitalInfo[];
   total: number;
   curPage: number;
   pageSize: number;
@@ -37,6 +36,7 @@ const hospitalData = reactive<HospitalData>({
   total: 0,
   curPage: 1,
   pageSize: 20,
+  layout: "prev, pager, next, total, sizes, jumper",
   list: [],
 });
 
@@ -51,12 +51,11 @@ onMounted(() => {
 const getHospitalList = async () => {
   try {
     const { curPage: page, pageSize: limit } = hospitalData;
-    const res: ApiResponse = await HospitalApi.hospitalList({page, limit});
-    console.log("[getHospitalList] ==> res: ", res);
+    const res: HospitalListResponse = await HospitalApi.hospitalList({page, limit});
     if(res.code == 200){
-      const { content, totalElements: total } = res.data as ListResponseData;
+      const { content, totalElements: total } = res.data;
       hospitalData.total =  total;
-      hospitalData.list = content.map((item: HospitalItem) => ({...item, logoData: `data:image/jpeg;base64,${item.logoData}`}));
+      hospitalData.list = content.map((item: HospitalInfo) => ({...item, logoData: `data:image/jpeg;base64,${item.logoData}`}));
     }
   } catch (e) {
     console.error("[getHospitalList] error: ", e);
@@ -64,7 +63,8 @@ const getHospitalList = async () => {
 }
 
 const onPageSize = function(pageSize: number){
-  console.log("[onPageSize]", pageSize);
+  console.log("[onPageSize]", pageSize, hospitalData);
+  getHospitalList();
 };
 const onCurPage = function(curPage: number){
   console.log("[onCurPage]", curPage);

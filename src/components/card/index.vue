@@ -26,32 +26,12 @@
 <script lang='ts' setup name="Card">
 import { AlarmClock, Medal } from '@element-plus/icons-vue';
 import type { PropType } from 'vue';
+import type { HospitalInfo } from '@/api/type'
 
-interface IParam {
-  hostypeString: string;
-  fullAddress: string;
-}
-
-interface IBookingRule{
-  cycle: number;
-  releaseTime: string;
-  stopTime: string;
-  quitDay: number;
-  quitTime: string;
-  rule: string[];
-}
-
-export interface HospitalItem {
-  id: string;
-  hosname: string;
-  param: IParam;
-  logoData: string;
-  bookingRule: IBookingRule;
-};
 
 const props = defineProps({
   info: {
-    type: Object as PropType<HospitalItem>,
+    type: Object as PropType<HospitalInfo>,
     default: () => ({
       hosname: "",
       param: {hostypeString: ""},

@@ -20,13 +20,24 @@
 <script lang='ts' setup name="Info">
 import { computed, ref } from 'vue';
 
-export interface Item{
-  id: number | string;
+interface WithDataset {
+  dataset: {
+    idx: string | number;
+    val: string | number;
+  };
+}
+
+interface InfoItem {
+  id: string | number;
   name: string;
-  value: string;
+  value: string | number;
 }
 
 const props = defineProps({
+  val: {
+    type: [Number, String],
+    default: "",
+  },
   title: {
     type: String,
     default: "",
@@ -36,19 +47,24 @@ const props = defineProps({
     default: "",
   },
   list: {
-    type: Array<Item>,
+    type: Array<InfoItem>,
     default: () => [],
   }
 });
+
+const emit = defineEmits<{
+  (event: "update:val", value: number | string): void
+}>();
 
 const isShowTitle = computed(() => props.title);
   
 const activeIndex = ref(0);
 
 const onSelect = (e: MouseEvent) => {
-  const { idx, val } = e.target?.dataset ?? {};
+  const { idx, val } = (e.target as unknown as WithDataset)?.dataset ?? {};
   console.log("[onSelect]", e, typeof idx, idx, val);
   idx && (activeIndex.value = +idx);
+  idx && emit("update:val", val);
 }
 
 </script>

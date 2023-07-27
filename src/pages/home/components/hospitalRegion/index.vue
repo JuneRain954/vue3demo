@@ -8,8 +8,12 @@
 import { reactive, onMounted, computed } from 'vue';
 import Info from '@/components/info/index.vue';
 import { HospitalApi } from '@/api/index';
+import type { HospitalRegionResponse, HospitalRegion } from '@/api/type'
 
-const region = reactive({
+const region = reactive<{
+  desc: string;
+  list: HospitalRegion[];
+}>({
   desc: "地区",
   list: [],
 })
@@ -22,7 +26,7 @@ const regionList = computed(() => [{id: "randomStr", name: "全部", value: ""},
 
 const getHospitalRegion =async () => {
   try {
-    const res = await HospitalApi.hospitalRegion();
+    const res: HospitalRegionResponse = await HospitalApi.hospitalRegion();
     console.log("[getHospitalRegion] res: ", res);
     if(res.code == 200){
       region.list = res.data;
