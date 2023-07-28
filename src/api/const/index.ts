@@ -2,13 +2,8 @@
  * 接口路径
  */
 
-export interface HospitalPage {
-  page: number;
-  limit: number;
-}
-
 // 请求方式
-export const enum  REQ_METHOD {
+export enum  REQ_METHOD {
   GET = "GET",
   POST = "POST",
   PUT = "PUT",
@@ -26,10 +21,10 @@ export const HOSPITAL = {
 function getDynamicURL(url: string){
   return {
     url,
-    URL: function(payload: HospitalPage){
+    URL: function<T extends object>(payload: T){
       let { url } = this;
       url = url.replace(/\{([a-zA-Z]+)\}/g, (_, group: string) => {
-        return group ? `${payload[group as keyof HospitalPage]}` : "";
+        return group ? `${payload[group as keyof T]}` : "";
       })
       return url;
     }

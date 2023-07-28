@@ -1,17 +1,35 @@
 <template>
   <div class='hospital-type-component'>
-    <Info v-model:val="hostype" :title="level.title" :desc="level.desc" :list="levelList" />
+    <Info v-model:val="hospitalType" :title="level.title" :desc="level.desc" :list="levelList" />
   </div>
 </template>
 
 <script lang='ts' setup name="HospitalType">
-import { reactive, onMounted, computed, ref } from 'vue';
+import { reactive, onMounted, computed } from 'vue';
 import Info from '@/components/info/index.vue';
 import { HospitalApi } from '@/api/index';
 import type { HospitalTypeResponse, HospitalType } from '@/api/type';
 
+const props = defineProps({
+  hostype: {
+    type: [String, Number],
+    default: "",
+  }
+})
 
-const hostype = ref<number | string>(0);
+const emit = defineEmits<{
+  (event: "update:hostype", val: string | number): void,
+}>()
+
+const hospitalType = computed({
+  get(){
+    return props.hostype;
+  },
+  set(val){
+    emit("update:hostype", val);
+  }
+})
+
 
 const level = reactive<{
   title: string;

@@ -73,6 +73,15 @@ export interface HospitalApiReponseData {
   totalPages: number;
 }
 
+
+// 医院分页接口请求参数类型
+export interface HospitalListParams {
+  page: number;
+  limit: number;
+  hostype?: string;
+  districtCode?: string;
+}
+
 // 医院分页接口的整体返回类型
 export interface HospitalListResponse extends ApiResponse {
   data: HospitalApiReponseData;

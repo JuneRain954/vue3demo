@@ -19,7 +19,7 @@
 
 <script lang='ts' setup name="HospitalList">
 import Card from '@/components/card/index.vue';
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, computed, onMounted, watch } from 'vue';
 import { HospitalApi } from '@/api/index';
 import type { HospitalListResponse, HospitalInfo } from '@/api/type'
 
@@ -28,15 +28,31 @@ export interface HospitalData {
   total: number;
   curPage: number;
   pageSize: number;
+  districtCode: string;
+  hosType: string;
   pageSizeList?: number[];
   layout?: string;
 }
+
+
+const props = defineProps({
+  districtCode: {
+    type: String,
+    default: "",
+  },
+  hostype: {
+    type: String,
+    default: ""
+  }
+});
 
 const hospitalData = reactive<HospitalData>({
   total: 0,
   curPage: 1,
   pageSize: 20,
   layout: "prev, pager, next, total, sizes, jumper",
+  districtCode: "",
+  hosType: "",
   list: [],
 });
 
@@ -47,11 +63,22 @@ onMounted(() => {
   getHospitalList();
 })
 
+watch(() => props.districtCode, (val) => {
+  hospitalData.districtCode = val;
+  getHospitalList();
+})
+
+watch(() => props.hostype, (val) => {
+  hospitalData.hosType = val;
+  getHospitalList();
+})
+
+
 // 获取医院列表
 const getHospitalList = async () => {
   try {
-    const { curPage: page, pageSize: limit } = hospitalData;
-    const res: HospitalListResponse = await HospitalApi.hospitalList({page, limit});
+    const { curPage: page, pageSize: limit, districtCode, hosType: hostype } = hospitalData;
+    const res: HospitalListResponse = await HospitalApi.hospitalList({page, limit, districtCode, hostype});
     if(res.code == 200){
       const { content, totalElements: total } = res.data;
       hospitalData.total =  total;
@@ -62,12 +89,11 @@ const getHospitalList = async () => {
   }
 }
 
-const onPageSize = function(pageSize: number){
-  console.log("[onPageSize]", pageSize, hospitalData);
+const onPageSize = function(){
   getHospitalList();
 };
-const onCurPage = function(curPage: number){
-  console.log("[onCurPage]", curPage);
+const onCurPage = function(){
+  getHospitalList();
 };
 
 

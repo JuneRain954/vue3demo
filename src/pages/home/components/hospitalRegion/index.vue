@@ -1,6 +1,6 @@
 <template>
   <div class='hospital-region-component'>
-    <Info :desc="region.desc" :list="regionList" />
+    <Info v-model:val="distCode" :desc="region.desc" :list="regionList" />
   </div>
 </template>
 
@@ -9,6 +9,26 @@ import { reactive, onMounted, computed } from 'vue';
 import Info from '@/components/info/index.vue';
 import { HospitalApi } from '@/api/index';
 import type { HospitalRegionResponse, HospitalRegion } from '@/api/type'
+
+const props = defineProps({
+  districtCode: {
+    type: [Number, String],
+    default: ""
+  }
+});
+
+const emit = defineEmits<{
+  (event: "update:districtCode", val: string | number): void;
+}>()
+
+const distCode = computed({
+  get(){
+    return props.districtCode;
+  },
+  set(val){
+    emit("update:districtCode", val);
+  }
+})
 
 const region = reactive<{
   desc: string;
@@ -27,7 +47,6 @@ const regionList = computed(() => [{id: "randomStr", name: "全部", value: ""},
 const getHospitalRegion =async () => {
   try {
     const res: HospitalRegionResponse = await HospitalApi.hospitalRegion();
-    console.log("[getHospitalRegion] res: ", res);
     if(res.code == 200){
       region.list = res.data;
     }
