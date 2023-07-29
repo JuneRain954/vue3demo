@@ -1,25 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router'
+import { ROUTES } from './const';
 
-// 路由
-const routes = [
-  {
-    path: "/home",
-    component: () => import("@/pages/home/index.vue"),
-  },
-  {
-    path: "/hospital",
-    component: () => import("@/pages/hospital/index.vue"),
-  },
-  {
-    path: "/",
-    redirect: "/home",
-  }
-];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: parseRoutes(ROUTES),
   scrollBehavior: () => ({ left: 0, top: 0 }), // 路由切换后的页面滚动行为
 });
+
+function parseRoutes<T extends object>(routes: T){
+  let routeList: RouteRecordRaw[] = [];
+  for(const key in routes){
+    routeList.push(routes[key] as RouteRecordRaw);
+  }
+  return routeList;
+}
 
 export default router;

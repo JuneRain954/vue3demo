@@ -5,7 +5,15 @@
 </template>
 
 <script lang='ts' setup name="hospital">
-// script有内容，组件名才会生效
+import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+onMounted(() => {
+  console.log("[onMounted] ==> ", route);
+})
+
 </script>
 
 <style lang='scss' scoped>

@@ -1,7 +1,7 @@
 <template>
   <div class='hospital-list'>
     <div class="item" v-for="item in hospitalData.list" :key="item.id">
-      <Card :info="item"/>
+      <Card :info="item" @click="onClickHospital(item)"/>
     </div>
   </div>
   <el-empty v-if="isEmpty" description="暂无数据" />
@@ -21,7 +21,9 @@
 <script lang='ts' setup name="HospitalList">
 import Card from '@/components/card/index.vue';
 import { reactive, computed, onMounted, onUnmounted, watch, getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
 import { HospitalApi } from '@/api/index';
+import { ROUTES } from '@/router/const';
 import type { HospitalListResponse, HospitalInfo } from '@/api/type'
 import type { Message } from 'element-plus'
 
@@ -56,6 +58,8 @@ const props = defineProps({
     default: "",
   },
 });
+
+const router = useRouter();
 
 const hospitalData = reactive<HospitalData>({
   total: 0,
@@ -129,6 +133,14 @@ const onPageSize = function(){
 const onCurPage = function(){
   getHospitalList();
 };
+
+const onClickHospital = function(info: HospitalInfo): void{
+  toDetail(info.hoscode);
+}
+
+const toDetail = (hospitalCode: string): void => {
+  router.push({name: ROUTES.HOSPITAL_DETAIL.name, params: { hospitalCode }});
+}
 
 
 </script>
