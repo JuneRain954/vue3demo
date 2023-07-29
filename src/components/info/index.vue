@@ -62,7 +62,6 @@ const activeIndex = ref(0);
 
 const onSelect = (e: MouseEvent) => {
   const { idx, val } = (e.target as unknown as WithDataset)?.dataset ?? {};
-  console.log("[onSelect]", e, typeof idx, idx, val);
   idx && (activeIndex.value = +idx);
   idx && emit("update:val", val);
 }

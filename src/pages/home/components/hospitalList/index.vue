@@ -1,5 +1,5 @@
 <template>
-  <div class='hospital-list'>
+  <div :class="['hospital-list', {'empty': disabled}]" data-tip="暂无数据">
     <div class="item" v-for="item in hospitalData.list" :key="item.id">
       <Card :info="item"/>
     </div>
@@ -19,9 +19,10 @@
 
 <script lang='ts' setup name="HospitalList">
 import Card from '@/components/card/index.vue';
-import { reactive, computed, onMounted, watch } from 'vue';
+import { reactive, computed, onMounted, onUnmounted, watch, getCurrentInstance } from 'vue';
 import { HospitalApi } from '@/api/index';
 import type { HospitalListResponse, HospitalInfo } from '@/api/type'
+import type { Message } from 'element-plus'
 
 export interface HospitalData {
   list: HospitalInfo[];
@@ -32,6 +33,10 @@ export interface HospitalData {
   hosType: string;
   pageSizeList?: number[];
   layout?: string;
+}
+
+interface WithMessage{
+  $message: Message;
 }
 
 
@@ -58,9 +63,14 @@ const hospitalData = reactive<HospitalData>({
 
 const disabled = computed(() => !hospitalData.total);
 const isShowPagination = computed(() => hospitalData.total);
+let inst = getCurrentInstance();
 
 onMounted(() => {
   getHospitalList();
+})
+
+onUnmounted(() => {
+  inst = null;
 })
 
 watch(() => props.districtCode, (val) => {
@@ -83,9 +93,11 @@ const getHospitalList = async () => {
       const { content, totalElements: total } = res.data;
       hospitalData.total =  total;
       hospitalData.list = content.map((item: HospitalInfo) => ({...item, logoData: `data:image/jpeg;base64,${item.logoData}`}));
+      !total && (inst?.proxy as unknown as WithMessage)?.$message({ message: "暂无数据" });
     }
-  } catch (e) {
+  } catch (e: any) {
     console.error("[getHospitalList] error: ", e);
+    (inst?.proxy as unknown as WithMessage)?.$message({message: e?.message});
   }
 }
 
@@ -101,6 +113,19 @@ const onCurPage = function(){
 
 <style lang='scss' scoped>
 .hospital-list{
+  &.empty{
+    position: relative;
+    &::after{
+      content: attr(data-tip);
+      font-size: 20px;
+      color: #bbb;;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+  }
+  min-height: 400px;
   margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;

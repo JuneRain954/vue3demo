@@ -1,12 +1,12 @@
 import request from '@/utils/request/index';
 import { HOSPITAL, REQ_METHOD } from '../const/index';
+import { hasOwnKey } from '@/utils/tools';
 import type {
   HospitalListParams,
   HospitalListResponse,
   HospitalTypeResponse,
   HospitalRegionResponse
 } from './type'
-import { hasOwnKey } from '@/utils/tools';
 
 const { TYPE, REGION, PAGE } = HOSPITAL;
 const { GET } = REQ_METHOD;
