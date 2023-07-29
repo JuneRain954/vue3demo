@@ -16,6 +16,7 @@ export const HOSPITAL = {
   PAGE: getDynamicURL("/hosp/hospital/{page}/{limit}"), // GET 获取分页列表
   TYPE: "/cmn/dict/findByDictCode/Hostype", // GET 医院类型
   REGION: "/cmn/dict/findByDictCode/Beijin",  // GET 医院地区
+  FIND_BY_NAME: getDynamicURL("/hosp/hospital/findByHosname/{hosname}"), // GET 根据名字搜索医院
 }
 
 function getDynamicURL(url: string){

@@ -1,14 +1,16 @@
 import request from '@/utils/request/index';
 import { HOSPITAL, REQ_METHOD } from '../const/index';
-import { hasOwnKey } from '@/utils/tools';
+import { hasOwnKey, isInvalidValue } from '@/utils/tools';
 import type {
+  HospitalNameParams,
+  HospitalNameResponse,
   HospitalListParams,
   HospitalListResponse,
   HospitalTypeResponse,
   HospitalRegionResponse
 } from './type'
 
-const { TYPE, REGION, PAGE } = HOSPITAL;
+const { TYPE, REGION, PAGE, FIND_BY_NAME } = HOSPITAL;
 const { GET } = REQ_METHOD;
 export class HospitalApi{
   constructor(){
@@ -27,6 +29,10 @@ export class HospitalApi{
     const { page, limit, ...rest } = params;
     return request({ url: PAGE.URL(params), method: GET, params: parseUrlSearchParams(rest) });
   }
+
+  static queryHospitalByName(params: HospitalNameParams): Promise<HospitalNameResponse>{
+    return request({url: FIND_BY_NAME.URL(params), method: GET });
+  }
 }
 
 /**
@@ -38,7 +44,7 @@ function parseUrlSearchParams<T extends object>(params: T): object{
   const searchParams = new URLSearchParams();
   for(const key in params){
     if(hasOwnKey(params, key)){
-      searchParams.set(key, `${params[key]}`);
+      !isInvalidValue(params[key]) && searchParams.set(key, `${params[key]}`);
     }
   }
   return searchParams;

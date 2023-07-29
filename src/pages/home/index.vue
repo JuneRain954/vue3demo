@@ -4,14 +4,14 @@
       <Carousel/>
     </section>
     <section class="operation">
-      <Search />
+      <Search @getQueryContent="onQueryContent" />
     </section>
     <section class="content">
       <el-row :gutter="20">
         <el-col :span="20">
           <HospitalType v-model:hostype="hosType" />
           <HospitalRegion v-model:districtCode="districtCode" />
-          <HospitalList :hostype="hosType" :districtCode="districtCode" />
+          <HospitalList :hostype="hosType" :districtCode="districtCode" :hospitalName="hospitalName" />
         </el-col>
         <el-col :span="4">2222</el-col>
       </el-row>
@@ -29,6 +29,12 @@ import { ref } from 'vue';
 
 const hosType = ref<string>("");
 const districtCode = ref<string>("");
+const hospitalName = ref<string>("");
+
+const onQueryContent = (queryContent: string): void => {
+  hospitalName.value = queryContent;
+}
+
 
 </script>
 

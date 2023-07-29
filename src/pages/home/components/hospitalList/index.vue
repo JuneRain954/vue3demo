@@ -1,9 +1,10 @@
 <template>
-  <div :class="['hospital-list', {'empty': disabled}]" data-tip="暂无数据">
+  <div class='hospital-list'>
     <div class="item" v-for="item in hospitalData.list" :key="item.id">
       <Card :info="item"/>
     </div>
   </div>
+  <el-empty v-if="isEmpty" description="暂无数据" />
   <blockquote v-if="isShowPagination">
     <el-pagination
       :total="hospitalData.total"
@@ -11,7 +12,7 @@
       v-model:page-size="hospitalData.pageSize"
       :page-sizes="hospitalData.pageSizeList"
       :layout="hospitalData.layout"
-      :disabled="disabled"
+      :disabled="isEmpty"
       @size-change="onPageSize"
       @current-change="onCurPage"/>
   </blockquote>
@@ -31,6 +32,7 @@ export interface HospitalData {
   pageSize: number;
   districtCode: string;
   hosType: string;
+  hospitalName: string;
   pageSizeList?: number[];
   layout?: string;
 }
@@ -48,7 +50,11 @@ const props = defineProps({
   hostype: {
     type: String,
     default: ""
-  }
+  },
+  hospitalName: {
+    type: String,
+    default: "",
+  },
 });
 
 const hospitalData = reactive<HospitalData>({
@@ -58,10 +64,11 @@ const hospitalData = reactive<HospitalData>({
   layout: "prev, pager, next, total, sizes, jumper",
   districtCode: "",
   hosType: "",
+  hospitalName: "",
   list: [],
 });
 
-const disabled = computed(() => !hospitalData.total);
+const isEmpty = computed(() => !hospitalData.total);
 const isShowPagination = computed(() => hospitalData.total);
 let inst = getCurrentInstance();
 
@@ -74,21 +81,36 @@ onUnmounted(() => {
 })
 
 watch(() => props.districtCode, (val) => {
-  hospitalData.districtCode = val;
+  updateHospitalData({districtCode: val});
   getHospitalList();
 })
 
 watch(() => props.hostype, (val) => {
-  hospitalData.hosType = val;
+  updateHospitalData({hosType: val});
   getHospitalList();
 })
+
+watch(() => props.hospitalName, (val) => {
+  updateHospitalData({hospitalName: val})
+  getHospitalList();
+})
+
+const updateHospitalData = (data: Partial<HospitalData>) => {
+  Object.assign(hospitalData, data);
+}
 
 
 // 获取医院列表
 const getHospitalList = async () => {
   try {
-    const { curPage: page, pageSize: limit, districtCode, hosType: hostype } = hospitalData;
-    const res: HospitalListResponse = await HospitalApi.hospitalList({page, limit, districtCode, hostype});
+    const {
+      curPage: page,
+      pageSize: limit,
+      districtCode,
+      hosType: hostype,
+      hospitalName: hosname,
+    } = hospitalData;
+    const res: HospitalListResponse = await HospitalApi.hospitalList({page, limit, districtCode, hostype, hosname});
     if(res.code == 200){
       const { content, totalElements: total } = res.data;
       hospitalData.total =  total;
@@ -113,19 +135,6 @@ const onCurPage = function(){
 
 <style lang='scss' scoped>
 .hospital-list{
-  &.empty{
-    position: relative;
-    &::after{
-      content: attr(data-tip);
-      font-size: 20px;
-      color: #bbb;;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate3d(-50%, -50%, 0);
-    }
-  }
-  min-height: 400px;
   margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;

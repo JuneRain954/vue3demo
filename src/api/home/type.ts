@@ -80,6 +80,7 @@ export interface HospitalListParams {
   limit: number;
   hostype?: string;
   districtCode?: string;
+  hosname?: string;
 }
 
 // 医院分页接口的整体返回类型
@@ -125,4 +126,14 @@ export interface HospitalRegion {
 // 医院地区接口整体返回类型
 export interface HospitalRegionResponse extends ApiResponse {
   data: HospitalRegion[];
+}
+
+// 医院名字搜索接口的请求数据类型
+export interface HospitalNameParams {
+  hosname: string;
+}
+
+// 医院名字搜索接口的返回类型
+export interface HospitalNameResponse extends ApiResponse {
+  data: HospitalInfo[];
 }
