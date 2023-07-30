@@ -9,6 +9,11 @@ const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 }), // 路由切换后的页面滚动行为
 });
 
+/**
+ * 路由信息对象转数组
+ * @param routes 路由信息对象
+ * @returns 路由信息数组
+ */
 function parseRoutes<T extends object>(routes: T){
   let routeList: RouteRecordRaw[] = [];
   for(const key in routes){

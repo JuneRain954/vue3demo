@@ -13,7 +13,11 @@
           <HospitalRegion v-model:districtCode="districtCode" />
           <HospitalList :hostype="hosType" :districtCode="districtCode" :hospitalName="hospitalName" />
         </el-col>
-        <el-col :span="4">2222</el-col>
+        <el-col :span="4">
+          <HospitalDepartment />
+          <NormalNotice />
+          <WarnNotice />
+        </el-col>
       </el-row>
     </section>
   </div>
@@ -25,6 +29,9 @@ import Search from '@/components/search/index.vue';
 import HospitalType from './components/hospitalType/index.vue';
 import HospitalRegion from './components/hospitalRegion/index.vue';
 import HospitalList from './components/hospitalList/index.vue';
+import HospitalDepartment from './components/hospitalDepartment/index.vue';
+import NormalNotice from './components/normalNotice/index.vue';
+import WarnNotice from './components/warnNotice/index.vue';
 import { ref } from 'vue';
 
 const hosType = ref<string>("");
