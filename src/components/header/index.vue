@@ -5,7 +5,7 @@
         <div class="img">
           <img class="logo" src="../../assets/images/logo.png" alt="logo">
         </div>
-        <div class="desc">预约挂号平台</div>
+        <div class="desc" @click="goHome">预约挂号平台</div>
       </section>
       <section class="operate right">
         <span class="btn">帮助中心</span>
@@ -16,7 +16,15 @@
 </template>
 
 <script setup lang='ts' name="Header">
-// 加个注释，避免组件名不生效
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/router/const';
+
+const router = useRouter();
+
+const goHome = () => {
+  router.push({name: ROUTES.HOME.name});
+}
+
 </script>
 
 <style scoped>
@@ -55,6 +63,7 @@
         }
       }
       .desc{
+        cursor: pointer;
         font-size: 20px;
         color: #55abfe;
       }
@@ -65,6 +74,10 @@
       justify-content: space-between;
       gap: 10px;
       .btn{
+        &:hover{
+          color: #55abfe;
+        }
+        cursor: pointer;
         font-size: 14px;
         color: #bbb;
       }
