@@ -53,27 +53,31 @@ const queryByName = async (hosname: string) => {
 .search-component{
   width: 100%;
   height: 50px;
-  margin: 10px 0;
+  margin: 50px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   // 搜索框样式调整
   :deep(.el-autocomplete){
-    width: 600px;
-    height: 40px;
+    width: 800px;
+    height: 60px;
     .el-input{
       height: 100%;
       .el-input__wrapper{
-        border-radius: 20px;
+        border-radius: 50px;
         padding-right: 54px;
         .el-input__inner{
-          padding-left: 6px;
+          padding-left: 10px;
+          font-size: 18px;
         }
       }
     }
   }
   :deep(.el-button){
     margin-left: -54px;
+    width: 100px;
+    height: 60px;
+    border-radius: 50px;
     position: relative;
   }
 }
