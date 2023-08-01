@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script lang='ts' setup name="hospital">
+<script lang='ts' setup name="Hospital">
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ROUTES } from '@/router/const';
@@ -49,7 +49,7 @@ const onSwitchRoute = (menu: RouteRecordRaw) => {
 <style lang='scss' scoped>
 .hospital-page{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   .menu-container{
     width: 20%;

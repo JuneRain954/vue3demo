@@ -7,10 +7,14 @@ import type {
   HospitalListParams,
   HospitalListResponse,
   HospitalTypeResponse,
-  HospitalRegionResponse
-} from './type'
+  HospitalRegionResponse,
+  HospitalRegistrationParams,
+  HospitalRegistrationResponse,
+  HospitalDepartmentParams,
+  HospitalDepartmentResponse,
+} from './type';
 
-const { TYPE, REGION, PAGE, FIND_BY_NAME } = HOSPITAL;
+const { TYPE, REGION, PAGE, FIND_BY_NAME, REGISTRATION, DEPARTMENT } = HOSPITAL;
 const { GET } = REQ_METHOD;
 export class HospitalApi{
   constructor(){
@@ -33,6 +37,15 @@ export class HospitalApi{
   static queryHospitalByName(params: HospitalNameParams): Promise<HospitalNameResponse>{
     return request({url: FIND_BY_NAME.URL(params), method: GET });
   }
+
+  static hospitalRegistration(params: HospitalRegistrationParams): Promise<HospitalRegistrationResponse> {
+    return request({ url: REGISTRATION.URL(params), method: GET });
+  }
+
+  static hospitalDepartment(params: HospitalDepartmentParams): Promise<HospitalDepartmentResponse> {
+    return request({ url: DEPARTMENT.URL(params), method: GET });
+  }
+
 }
 
 /**

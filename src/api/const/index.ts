@@ -17,6 +17,8 @@ export const HOSPITAL = {
   TYPE: "/cmn/dict/findByDictCode/Hostype", // GET 医院类型
   REGION: "/cmn/dict/findByDictCode/Beijin",  // GET 医院地区
   FIND_BY_NAME: getDynamicURL("/hosp/hospital/findByHosname/{hosname}"), // GET 根据名字搜索医院
+  REGISTRATION: getDynamicURL("/hosp/hospital/{hoscode}"), // GET 获取医院预约挂号详情
+  DEPARTMENT: getDynamicURL("/hosp/hospital/department/{hoscode}"),  // GET 获取医院科室列表
 }
 
 function getDynamicURL(url: string){

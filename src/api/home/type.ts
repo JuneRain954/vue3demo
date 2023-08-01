@@ -137,3 +137,31 @@ export interface HospitalNameParams {
 export interface HospitalNameResponse extends ApiResponse {
   data: HospitalInfo[];
 }
+
+// 医院挂号详情接口的请求参数类型
+export interface HospitalRegistrationParams {
+  hoscode: string;
+}
+
+// 医院挂号详情接口的返回类型
+export interface HospitalRegistrationResponse extends ApiResponse {
+  data: {
+    bookingRule: HospitalInfo["bookingRule"];
+    hospital: HospitalInfo;
+  }
+}
+
+// 医院科室列表接口的请求参数类型
+export type HospitalDepartmentParams = HospitalRegistrationParams;
+
+// 医院科室信息
+export interface HospitalDepartmentInfo {
+  children: HospitalDepartmentInfo[] | null;
+  depname: string;
+  depcode: string;
+}
+
+// 医院科室列表接口的返回类型
+export interface HospitalDepartmentResponse extends ApiResponse{
+  data: HospitalDepartmentInfo[];
+}
