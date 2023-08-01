@@ -53,17 +53,18 @@ const onSwitchRoute = (menu: RouteRecordRaw) => {
   justify-content: center;
   .menu-container{
     width: 20%;
+    min-height: 100vh;
     box-sizing: border-box;
-    border-right: 1px solid red;
     .menu-list{
       .menu{
         &.active{
           color: #42a5f5;
-          background: linear-gradient(90deg, #42a5f5 0, #42a5f5 10px, #fff 10px, #fff 100%);
+          font-weight: bold;
+          // background: linear-gradient(90deg, #42a5f5 0, #42a5f5 10px, #fff 10px, #fff 100%);
         }
         font-size: 18px;
-        height: 40px;;
-        line-height: 40px;
+        height: 80px;;
+        line-height: 80px;
         text-align: center;
       }
     }
