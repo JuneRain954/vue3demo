@@ -9,7 +9,7 @@
     </header>
     <section class="hospital-info">
       <div class="logo">
-        <img :src="'data:image/jpeg;base64,' + registrationData?.hospital.logoData" alt="logo">
+        <img :src="logoImgUrl" alt="logo">
       </div>
       <div class="rules">
         <section class="registration-rules">
@@ -48,12 +48,11 @@
             :class="['department-item', {'active': dept.depcode === curDeptCode}]"
             v-for="(dept) in departmentList"
             :key="dept.depcode">
-            <h5 class="dept-name" :id="'id-' + dept.depcode">{{ dept.depname }}</h5>
+            <h5 class="dept-name" :id="`id-${dept.depcode}`">{{ dept.depname }}</h5>
             <ul class="department-list" @click="onSelectDept">
               <li
                 class="item" v-for="(item) in dept.children || []"
                 :data-code="item.depcode"
-                :data-parentCode="dept.depcode"
                 :key="item.depcode">
                 {{ item.depname }}
               </li>
@@ -66,17 +65,16 @@
 </template>
 
 <script lang='ts' setup name="Registration">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { HospitalApi } from '@/api/index';
 import { Medal } from '@element-plus/icons-vue';
-import type { HospitalRegistrationResponse, HospitalDepartmentResponse } from '@/api/type.ts'
+import type { HospitalRegistrationResponse, HospitalDepartmentResponse } from '@/api/type.ts';
 
 interface WithDataset {
   dataset: {
     idx?: string | number;
     code?: string;
-    parentcode?: string;
   };
 }
 
@@ -86,6 +84,7 @@ const departmentList = ref<HospitalDepartmentResponse["data"]>();
 const departmentContainer = ref<HTMLElement>();
 const curDeptCode = ref<string>("");
 const selectDeptCode = ref<string>("");
+const logoImgUrl = computed(() => `data:image/jpeg;base64, ${registrationData.value?.hospital.logoData}`);
 
 onMounted(() => {
   getHospitalRegistraton();
