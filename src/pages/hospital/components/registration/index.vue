@@ -29,7 +29,7 @@
         </section>
       </div>
     </section>
-    <section class="department-info" ref="departmentArea">
+    <section class="department-info">
       <h2 class="dept-title">选择科室</h2>
       <section class="info-list">
         <aside class="menu-department-list">
@@ -43,8 +43,11 @@
             </li>
           </ul>
         </aside>
-        <aside class="department">
-          <div class="department-item"  v-for="(dept) in departmentList" :key="dept.depcode">
+        <aside class="department" ref="departmentContainer">
+          <div
+            :class="['department-item', {'active': dept.depcode === curDeptCode}]"
+            v-for="(dept) in departmentList"
+            :key="dept.depcode">
             <h5 class="dept-name" :id="'id-' + dept.depcode">{{ dept.depname }}</h5>
             <ul class="department-list" @click="onSelectDept">
               <li
@@ -80,9 +83,9 @@ interface WithDataset {
 const route = useRoute();
 const registrationData = ref<HospitalRegistrationResponse["data"]>();
 const departmentList = ref<HospitalDepartmentResponse["data"]>();
+const departmentContainer = ref<HTMLElement>();
 const curDeptCode = ref<string>("");
 const selectDeptCode = ref<string>("");
-const departmentArea = ref<HTMLElement>();
 
 onMounted(() => {
   getHospitalRegistraton();
@@ -115,16 +118,28 @@ const getHospitalDepartmentList = async () => {
 const onSwitchDept = (e: MouseEvent) => {
   const code: string = (e.target as unknown as WithDataset)?.dataset?.code ?? "";
   curDeptCode.value = code;
-  const targetElement: HTMLElement | null = document.querySelector(`#id-${code}`);
-  targetElement && targetElement.scrollIntoView({
-    block: "start",
-    behavior: "smooth",
-  });
+  scrollToTargetDept();
 }
 
 const onSelectDept = (e: MouseEvent) => {
   const code: string = (e.target as unknown as WithDataset).dataset.code ?? "";
   selectDeptCode.value = code;
+}
+
+const scrollToTargetDept = () => {
+  document.documentElement?.scrollTo(0, 250);
+  const targetElement: HTMLElement | null = document.querySelector(`#id-${curDeptCode.value}`);
+  const targetLength: number = targetElement?.offsetTop as number;
+  const parentLength: number = departmentContainer.value?.offsetTop as number;
+  scrollTo(departmentContainer.value as HTMLElement, parentLength, targetLength);
+}
+
+const scrollTo = (element: HTMLElement, begin: number, end: number): void => {
+  element.scrollTo({
+    left: 0,
+    top: end - begin,
+    behavior: "smooth",
+  })
 }
 
 </script>
@@ -226,6 +241,11 @@ const onSelectDept = (e: MouseEvent) => {
         height: 1000px;
         overflow-y: auto;
         .department-item{
+          padding-left: 10px;
+          &.active{
+            background-color: #f4f9ff;
+            background-clip: border-box;
+          }
           .dept-name{
             padding: 5px 20px;
             margin: 20px 0 5px 0;
