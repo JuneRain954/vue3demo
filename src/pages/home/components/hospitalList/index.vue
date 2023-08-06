@@ -22,6 +22,7 @@
 import Card from '@/components/card/index.vue';
 import { reactive, computed, onMounted, onUnmounted, watch, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
+import { useHospitalStore } from '@/store/index';
 import { HospitalApi } from '@/api/index';
 import { ROUTES } from '@/router/const';
 import type { HospitalListResponse, HospitalInfo } from '@/api/type'
@@ -42,24 +43,8 @@ export interface HospitalData {
 interface WithMessage{
   $message: Message;
 }
-
-
-const props = defineProps({
-  districtCode: {
-    type: String,
-    default: "",
-  },
-  hostype: {
-    type: String,
-    default: ""
-  },
-  hospitalName: {
-    type: String,
-    default: "",
-  },
-});
-
 const router = useRouter();
+const hospitalStore = useHospitalStore();
 
 const hospitalData = reactive<HospitalData>({
   total: 0,
@@ -84,17 +69,17 @@ onUnmounted(() => {
   inst = null;
 })
 
-watch(() => props.districtCode, (val) => {
+watch(() => hospitalStore.districtCode, (val) => {
   updateHospitalData({districtCode: val});
   getHospitalList();
 })
 
-watch(() => props.hostype, (val) => {
+watch(() => hospitalStore.hostype, (val) => {
   updateHospitalData({hosType: val});
   getHospitalList();
 })
 
-watch(() => props.hospitalName, (val) => {
+watch(() => hospitalStore.hospitalName, (val) => {
   updateHospitalData({hospitalName: val})
   getHospitalList();
 })
