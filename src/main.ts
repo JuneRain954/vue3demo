@@ -4,6 +4,7 @@ import { createPinia } from 'pinia';
 // 引入 ElementPlus UI库
 import ElementPlus from 'element-plus';
 import "element-plus/dist/index.css";
+// @ts-expect-error
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 
 import App from './App.vue';
