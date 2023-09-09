@@ -4,6 +4,8 @@ import { createPinia } from 'pinia';
 // 引入 ElementPlus UI库
 import ElementPlus from 'element-plus';
 import "element-plus/dist/index.css";
+// 引入 tailWindCss
+import "./style/tailwindcss.global.css";
 // @ts-expect-error
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 

@@ -65,7 +65,8 @@
 </template>
 
 <script lang='ts' setup name="Registration">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useHospitalDetailStore } from '@/store/hospitalDetail/useHospitalDetailStore';
 import { useRoute } from 'vue-router';
 import { HospitalApi } from '@/api/index';
 import { Medal } from '@element-plus/icons-vue';
@@ -79,6 +80,7 @@ interface WithDataset {
 }
 
 const route = useRoute();
+const hospitalDetailStore = useHospitalDetailStore();
 const registrationData = ref<HospitalRegistrationResponse["data"]>();
 const departmentList = ref<HospitalDepartmentResponse["data"]>();
 const departmentContainer = ref<HTMLElement>();
@@ -87,21 +89,14 @@ const selectDeptCode = ref<string>("");
 const logoImgUrl = computed(() => `data:image/jpeg;base64, ${registrationData.value?.hospital.logoData}`);
 
 onMounted(() => {
-  getHospitalRegistraton();
   getHospitalDepartmentList();
+  initRegistrationData(hospitalDetailStore.hospitalDetail as HospitalRegistrationResponse["data"]);
 })
 
+watch(() => hospitalDetailStore.hospitalDetail, (val) => {
+  initRegistrationData(val as HospitalRegistrationResponse["data"]);
+})
 
-const getHospitalRegistraton = async () => {
-  try {
-    const res: HospitalRegistrationResponse = await HospitalApi.hospitalRegistration({hoscode: `${route.params?.hospitalCode}`})
-    if(res.code === 200){
-      registrationData.value = res.data;
-    }
-  } catch (e) {
-    console.error("[getHospitalRegistraton] error: ", e);
-  }
-}
 
 const getHospitalDepartmentList = async () => {
   try {
@@ -112,6 +107,14 @@ const getHospitalDepartmentList = async () => {
   } catch (e) {
     console.error("[getHospitalDepartmentList] error: ", e);
   }
+}
+
+const initRegistrationData = (data:  HospitalRegistrationResponse["data"]) => {
+  if(!registrationData.value) updateRegistrationData(data);
+}
+
+const updateRegistrationData = (data: HospitalRegistrationResponse["data"]) => {
+  registrationData.value = data;
 }
 
 const onSwitchDept = (e: MouseEvent) => {
@@ -126,7 +129,7 @@ const onSelectDept = (e: MouseEvent) => {
 }
 
 const scrollToTargetDept = () => {
-  document.documentElement?.scrollTo(0, 250);
+  document.documentElement?.scrollTo(0, 230);
   const targetElement: HTMLElement | null = document.querySelector(`#id-${curDeptCode.value}`);
   const targetLength: number = targetElement?.offsetTop as number;
   const parentLength: number = departmentContainer.value?.offsetTop as number;

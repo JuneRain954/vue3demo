@@ -1,5 +1,5 @@
 <template>
-  <div class='detail'>
+  <div class='detail  text-blue-700'>
   {{ txt }} 
   </div>
 </template>

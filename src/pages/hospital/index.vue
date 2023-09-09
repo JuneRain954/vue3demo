@@ -21,16 +21,22 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ROUTES } from '@/router/const';
+import { useHospitalDetailStore } from '../../store/hospitalDetail/useHospitalDetailStore';
+import { HospitalApi } from '@/api/index';
 import type { RouteRecordRaw } from 'vue-router'
+import type { HospitalRegistrationResponse } from "@/api/type.ts";
 
 const route = useRoute();
 const router = useRouter();
+
+const hospitalDeatilStore = useHospitalDetailStore();
 
 const menuList = ref<RouteRecordRaw[]>([]);
 const curRouteName = computed(() => route.name);
 
 onMounted(() => {
   initMenuList();
+  initHospitalDetailStore();
 })
 
 const initMenuList = () => {
@@ -38,6 +44,17 @@ const initMenuList = () => {
     list.push(menu);
     return list;
   }, []);
+}
+
+const initHospitalDetailStore = async () => {
+  try {
+    const res: HospitalRegistrationResponse = await HospitalApi.hospitalRegistration({hoscode: `${route.params?.hospitalCode}`});
+    if(res.code === 200){
+      hospitalDeatilStore.updateHospitalDetail(res.data);
+    }
+  } catch (e) {
+    console.error("[initHospitalDetailStore] eror: ", e);
+  }
 }
 
 const onSwitchRoute = (menu: RouteRecordRaw) => {
