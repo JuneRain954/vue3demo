@@ -74,6 +74,7 @@ const queryByName = async (hosname: string) => {
     }
   }
   :deep(.el-button){
+    background-color: #409eff;
     margin-left: -54px;
     width: 100px;
     height: 60px;
